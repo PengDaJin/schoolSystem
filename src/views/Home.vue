@@ -1,7 +1,19 @@
 <!-- 展示首页 -->
 <template>
   <div class="index-page">
-    <el-button type="danger" @click="logout">注销登陆</el-button>
+    <el-container>
+      <el-header style="text-align: left; font-size: 12px">
+        <span>用户：{{ user.username }}</span>
+        <el-button type="danger" @click="logout">注销登陆</el-button>
+      </el-header>
+      <el-container>
+        <el-aside width="200px">Aside</el-aside>
+        <el-container>
+          <el-main>Main</el-main>
+          <el-footer>Footer</el-footer>
+        </el-container>
+      </el-container>
+    </el-container>
   </div>
 </template>
 
@@ -14,7 +26,12 @@ export default {
   name: "Home.vue",
   //import引入的组件需要注入到对象中才能使用
   data () {
-    return {}
+    return {
+      // tableData: Array(5).fill(item),
+      user: {
+        username: '访问错误！'
+      }
+    }
   },
 
   methods: {
@@ -29,6 +46,13 @@ export default {
         _this.$router.push("/login")
 
       })
+    }
+  },
+  created () {
+    if (this.$store.getters.getUser.username) {
+      this.user.username = this.$store.getters.getUser.username
+
+      this.hasLogin = true
     }
   },
 
@@ -46,5 +70,46 @@ export default {
     height: auto;
     background-color: #f5f5f5;
   }
+}
+
+.el-header,
+.el-footer {
+  background-color: #b3c0d1;
+  color: #333;
+  text-align: center;
+  line-height: 60px;
+}
+
+.el-aside {
+  background-color: #d3dce6;
+  color: #333;
+  text-align: center;
+  line-height: 200px;
+}
+
+.el-main {
+  background-color: #e9eef3;
+  color: #333;
+  text-align: center;
+  line-height: 160px;
+}
+
+body > .el-container {
+  margin-bottom: 40px;
+}
+
+.el-container:nth-child(5) .el-aside,
+.el-container:nth-child(6) .el-aside {
+  line-height: 260px;
+}
+
+.el-container:nth-child(7) .el-aside {
+  line-height: 320px;
+}
+
+span {
+  font-weight: 700;
+  font-size: medium;
+  margin-right: 10px;
 }
 </style>
