@@ -352,9 +352,10 @@ export default {
 </script>
 <style >
 body {
-  width: 100%;
+  width: 100vw;
   height: 100vh;
   background-image: url("../assets/img/bg.png");
+  background-size: 100% 100%;
   /* background-color: #000; */
 }
 .el-row {
