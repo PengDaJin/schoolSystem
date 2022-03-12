@@ -15,6 +15,7 @@ const routes = [
     name: "Home",
     meta: {
       title: "Home/Index",
+      requireAuth: true
     },
     component: Home,
   },

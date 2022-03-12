@@ -168,7 +168,7 @@ export default {
         type: 'warning'
       }).then(() => {
         this.$http({
-          url: this.$http.adornUrl('/sys/user/delete'),
+          url: this.$http.adornUrl('/user/delete'),
           method: 'post',
           data: this.$http.adornData(ids, false)
         }).then(({ data }) => {
