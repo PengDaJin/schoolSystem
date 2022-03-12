@@ -1,6 +1,6 @@
-<!-- 展示首页 -->
+<!-- 用户信息编辑页 -->
 <template>
-  <div class="index-page">
+  <div>
     <el-container style="height: 100vh; border: 1px solid #eee">
       <el-aside width="200px" style="background-color: rgb(238, 241, 246)">
         <el-menu style="height:99.8vh" :default-openeds="['1','2','3']" :router="true">
@@ -52,96 +52,49 @@
 </template>
 
 <script>
-//这里可以导入其他文件（比如：组件，工具js，第三方插件js，json文件，图片文件等等）
-//例如：import 《组件名称》 from '《组件路径》';
-// import TopBar from '@/components/homeComponents/TopBar'
+import UserListPage from '@/components/userManager/user'
+import UpdateUserInfoPage from '@/components/userInfo/UpdateUserInfo'
+import UpdateUserPwdPage from '@/components/userInfo/UpdateUserPwd';
+import DeleteUserPage from '@/components/userInfo/DeleteUser';
 
 export default {
-  name: "Home.vue",
-  //import引入的组件需要注入到对象中才能使用
+  name: 'User',
+  components: {
+    UpdateUserInfoPage,
+    UpdateUserPwdPage,
+    DeleteUserPage
+  },
   data () {
     return {
-      // tableData: Array(5).fill(item),
       user: {
-        username: '访问错误！'
+        username: 'error!'
       }
     }
   },
 
-  methods: {
-    logout () {
-      const _this = this
-      _this.$axios.get("/logout", {
-        headers: {
-          "Authorization": localStorage.getItem("token")
-        }
-      }).then(res => {
-        _this.$store.commit("REMOVE_INFO")
-        _this.$router.push("/login")
-
-      })
-    }
-  },
   created () {
+
     if (this.$store.getters.getUser.username) {
       this.user.username = this.$store.getters.getUser.username
 
       this.hasLogin = true
     }
-  },
-
-  components: {
-    // 'TopBar': TopBar,
-  }
-};
-</script>
-<style lang="less" scoped>
-.index-page {
-  height: 100vh;
-  .gray-page {
-    display: flex;
-    flex-direction: column;
-    width: 100%;
-    height: auto;
-    background-color: #f5f5f5;
   }
 }
-
-.el-header,
-.el-footer {
+</script>
+<style lang='less' scoped>
+.el-header {
   background-color: #b3c0d1;
   color: #333;
-  text-align: center;
   line-height: 60px;
 }
 
 .el-aside {
-  background-color: #d3dce6;
   color: #333;
-  text-align: center;
-  line-height: 200px;
 }
-
-.el-main {
-  background-color: #e9eef3;
-  color: #333;
-  text-align: center;
-  line-height: 160px;
+.el-dropdown {
+  font-size: 20px;
 }
-
-body > .el-container {
-  margin-bottom: 40px;
-}
-
-.el-container:nth-child(5) .el-aside,
-.el-container:nth-child(6) .el-aside {
-  line-height: 260px;
-}
-
-.el-container:nth-child(7) .el-aside {
-  line-height: 320px;
-}
-
 span {
   font-weight: 700;
   font-size: medium;
