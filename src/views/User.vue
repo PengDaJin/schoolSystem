@@ -39,7 +39,7 @@
 
         <el-header style="text-align: left; font-size: 12px">
           <span>用户：{{ user.username }}</span>
-          <el-button type="danger" @click="logout">注销登陆</el-button>
+          <!-- <el-button type="danger" @click="logout">注销登陆</el-button> -->
         </el-header>
 
         <el-main>
