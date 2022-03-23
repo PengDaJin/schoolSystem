@@ -1,7 +1,6 @@
 <template>
   <div class="mod-config">
     <template v-if="operateType === 0">
-      <rj-content-box title="查询条件">
         <el-row :gutter="30" style="margin-bottom: -20px">
           <el-form :inline="true" :model="dataForm" @keyup.enter.native="getDataList()">
             <el-col :inline="true" :span="3.5">
@@ -17,16 +16,16 @@
                     <el-button type="warning" @click="clearForm()">清空</el-button>
                   </el-form-item>
                 </el-col>
-                <el-button v-if="isAuth('sys:classinfo:save')" type="primary" @click="addOrUpdateHandle()">新增
+                <!-- <el-button v-if="isAuth('sys:classinfo:save')" type="primary" @click="addOrUpdateHandle()">新增
                 </el-button>
                 <el-button v-if="isAuth('sys:classinfo:delete')" type="danger" @click="deleteHandle()"
-                  :disabled="dataListSelections.length <= 0">批量删除</el-button>
+                  :disabled="dataListSelections.length <= 0">批量删除</el-button> -->
+              <el-button type="primary" @click="addOrUpdateHandle()">新增</el-button>
+              <el-button type="danger" @click="deleteHandle()" :disabled="dataListSelections.length <= 0">批量删除</el-button>
               </el-form-item>
             </el-col>
           </el-form>
         </el-row>
-      </rj-content-box>
-      <rj-content>
         <el-table :data="dataList" border v-loading="dataListLoading" @selection-change="selectionChangeHandle"
           :cell-style="TableRowStyle" style="width: 100%;">
           <el-table-column type="selection" header-align="center" align="center" width="50">
@@ -54,7 +53,6 @@
           :page-sizes="[10, 20, 50, 100]" :page-size="pageSize" :total="totalPage"
           layout="total, sizes, prev, pager, next, jumper">
         </el-pagination>
-      </rj-content>
     </template>
     <!-- 弹窗, 新增 / 修改 -->
     <add-or-update v-show="operateType === 1" ref="addOrUpdate" @refreshDataList="getDataList" @goBack="goBack">

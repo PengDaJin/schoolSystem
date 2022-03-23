@@ -1,0 +1,170 @@
+// 按钮样式切换效果开始
+.hc-btn-list {
+
+  // margin: 10px;
+  .btn {
+    // width: 72px;
+    padding: 0 .10rem;
+    height: .28rem;
+    line-height: .28rem;
+    text-align: center;
+    background: rgba(84, 184, 249, 0.1);
+    border: 1px solid rgba(83, 178, 249, 0.46);
+    border-radius: .02rem;
+    font-size: .12rem;
+    font-family: Adobe Heiti Std;
+    font-weight: normal;
+    color: #6ad1f4;
+    cursor: pointer;
+  }
+
+  .active {
+    box-shadow: 1px 1px 8px 1px rgba(83, 178, 249, 0.46);
+    background: rgba(84, 184, 249, 0.26);
+    border: 1px solid rgba(83, 178, 249, 0.46);
+  }
+}
+
+// 按钮样式切换效果结束
+
+
+/* 浏览器滚动条样式 */
+
+::-webkit-scrollbar {
+  /*滚动条整体样式*/
+  width: 4px;
+  /*高宽分别对应横竖滚动条的尺寸*/
+  height: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+  /*滚动条里面小方块*/
+  border-radius: 4px;
+  box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.2);
+  background: #c0c0c0;
+}
+
+::-webkit-scrollbar-track {
+  /*滚动条里面轨道*/
+  box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.2);
+  border-radius: 4px;
+  background: #ededed;
+}
+
+/* 地图样式开始 */
+
+.minemap-ctrl-logo {
+  display: none !important;
+}
+
+/* 地图样式结束 */
+
+/* table样式修改 */
+.hc-popup-table {
+
+  .el-table,
+  .el-table__expanded-cell {
+    background: transparent;
+  }
+
+  /* 修改头部背景和字体颜色 */
+  .el-table th {
+    background: #344067;
+    color: #fff;
+    font-weight: 500;
+  }
+
+  /* 修改表头字体颜色 */
+  .el-table th>.cell {
+    color: #8EB7FA;
+  }
+
+  /* 修改头部单元格边框颜色 */
+  .el-table th.is-leaf {
+    border: none;
+  }
+
+  /* 修改【基数】行背景 */
+  .el-table tr {
+    background: transparent;
+  }
+
+  /* 修改【基数】行单元格边框 */
+  .el-table tr td {
+    background: transparent;
+    border: none;
+  }
+
+  /* 修改【偶数】行背景和单元格边框颜色 */
+  .el-table__body tbody tr:nth-child(even) td {
+    background: rgba(255, 255, 255, 0.14);
+    border: none;
+  }
+
+  /* 修改表格最底部颜色*/
+  .el-table::before {
+    background: transparent;
+    z-index: 0;
+  }
+
+  /* 修改表格无数据背景，字体颜色 */
+  .el-table__empty-block {
+    background: #16203C;
+  }
+
+  .el-table__empty-text {
+    color: #ccc
+  }
+
+  /* 修改表格内容部分字体颜色 */
+  .el-table {
+    color: #fff;
+  }
+
+  /* 修改表格鼠标悬浮hover背景色和字体样式 */
+  .el-table--enable-row-hover .el-table__body tr:hover {
+    box-shadow: 0px 0px 18px 0px rgba(7, 219, 255, 0.52) inset;
+  }
+
+  .el-table--enable-row-hover .el-table__body tr:hover>td {
+    background: rgba(7, 219, 255, 0.1);
+
+    font-weight: bold;
+  }
+
+  // 去掉表格单元格边框
+  // .el-table th {
+  //   border: none;
+  // }
+
+  // .el-table td,
+  // .el-table th.is-leaf {
+  //   border: none;
+  // }
+
+  // 表格最外边框
+
+  // .el-table--border,
+  // .el-table--group {
+  //   border: none;
+  // }
+
+  // .el-table__header-wrapper th:nth-last-of-type(2) {
+  //   border-right: none;
+  // }
+
+  // .el-table--border td:nth-last-of-type(1) {
+  //   border-right: none;
+  // }
+
+  // .el-table--border::after,
+  // .el-table--group::after {
+  //   width: 0;
+  // }
+}
+
+/* table样式修改 */
+
+.mod-config {
+  width: 10%;
+}

@@ -3,7 +3,7 @@ import Element from "element-ui";
 import store from "./store";
 import router from "./router";
 
-axios.defaults.baseURL = "http://localhost:8801";
+axios.defaults.baseURL = "http://175.178.215.234:8801";
 axios.interceptors.request.use((config) => {
   // console.log("前置拦截");
   // 可以统一设置请求头

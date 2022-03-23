@@ -18,7 +18,8 @@
             <template slot="title"><i class="el-icon-goods"></i>物品操作</template>
             <el-menu-item-group>
               <el-menu-item index="/accInfo/addProductPage">新增物品</el-menu-item>
-              <el-menu-item index="/accInfo/productInfoPage">货架操作</el-menu-item>
+              <!-- <el-menu-item index="/accInfo/productInfoPage">货架操作</el-menu-item> -->
+              <el-menu-item index="/user/listx">货架操作</el-menu-item>
               <el-menu-item index="/user/list">用户信息列表</el-menu-item>
             </el-menu-item-group>
           </el-submenu>
@@ -52,7 +53,6 @@
 </template>
 
 <script>
-import UserListPage from '@/components/userManager/user'
 import UpdateUserInfoPage from '@/components/userInfo/UpdateUserInfo'
 import UpdateUserPwdPage from '@/components/userInfo/UpdateUserPwd';
 import DeleteUserPage from '@/components/userInfo/DeleteUser';

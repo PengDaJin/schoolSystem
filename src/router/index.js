@@ -5,11 +5,11 @@ import Home from "../views/Home.vue";
 Vue.use(VueRouter);
 
 const routes = [
-  {
-    path: "/",
-    name: "Home",
-    redirect: { name: "Home" },
-  },
+  // {
+  //   path: "/",
+  //   name: "Home",
+  //   redirect: { name: "Home" },
+  // },
   {
     path: "/Home",
     name: "Home",
@@ -28,34 +28,84 @@ const routes = [
     component: () => import("../views/Login.vue"),
   },
   {
-    path: "/user",
-    name: "UserInfo",
+    path: "/home",
+    name: "home",
     meta: {
-      title: "用户信息页面",
+      title: "首页",
       requireAuth: true,
     },
-    component: () => import("../views/User.vue"),
+    component: () => import("../views/Home.vue"),
     children: [
+      // ---------- 便捷校园 开始 ----------
       {
-        path: "/user/list",
-        name: 'UserListPage',
+        path: "/convenientCampus/roomap",
+        name: 'roomap',
+        meta: {
+          title: "教室预约",
+          requireAuth: true
+        },
+        component: () => import("../components/convenientCampus/roomap.vue")
+      },
+      {
+        path: "/convenientCampus/timeinfo",
+        name: 'timeinfo',
+        meta: {
+          title: "学校课程时间",
+          requireAuth: true
+        },
+        component: () => import("../components/convenientCampus/timeinfo.vue")
+      },
+      // ---------- 便捷校园 结束 ----------
+      // ---------- 综合信息 开始 ----------
+      {
+        path: "/inforMation/user",
+        name: 'user',
         meta: {
           title: "用户信息列表",
           requireAuth: true
         },
-        component: () => import("../components/userManager/user.vue")
+        component: () => import("../components/inforMation/user.vue")
       },
       {
-        path: "/user/updateUser",
+        path: "/inforMation/lessoninfo",
+        name: 'lessoninfo',
+        meta: {
+          title: "课程信息",
+          requireAuth: true
+        },
+        component: () => import("../components/inforMation/lessoninfo.vue")
+      },
+      {
+        path: "/inforMation/classinfo",
+        name: 'classinfo',
+        meta: {
+          title: "班级信息",
+          requireAuth: true
+        },
+        component: () => import("../components/inforMation/classinfo.vue")
+      },
+      {
+        path: "/inforMation/roominfo",
+        name: 'roominfo',
+        meta: {
+          title: "教室信息",
+          requireAuth: true
+        },
+        component: () => import("../components/inforMation/roominfo.vue")
+      },
+      // ---------- 综合信息 结束 ----------
+      // ---------- 个人信息 开始 ----------
+      {
+        path: "/userInfo/updateUser",
         name: 'UpdateUserInfoPage',
         meta: {
-          title: "更改个人信息",
+          title: "修改信息",
           requireAuth: true
         },
         component: () => import("../components/userInfo/UpdateUserInfo.vue")
       },
       {
-        path: "/user/updatePassword",
+        path: "/userInfo/updatePassword",
         name: 'UpdateUserPwdPage',
         meta: {
           title: "修改密码",
@@ -64,7 +114,7 @@ const routes = [
         component: () => import("../components/userInfo/UpdateUserPwd.vue")
       },
       {
-        path: "/user/deleteUser",
+        path: "/userInfo/deleteUser",
         name: 'DeleteUserPage',
         meta: {
           title: "注销账户",
@@ -72,6 +122,7 @@ const routes = [
         },
         component: () => import("../components/userInfo/DeleteUser.vue")
       }
+      // ---------- 个人信息 结束 ----------
     ]
   },
 ];

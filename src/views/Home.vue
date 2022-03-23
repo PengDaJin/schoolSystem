@@ -3,49 +3,72 @@
   <div class="index-page">
     <el-container style="height: 100vh; border: 1px solid #eee">
       <el-aside width="200px" style="background-color: rgb(238, 241, 246)">
-        <el-menu style="height:99.8vh" :default-openeds="['1','2','3']" :router="true">
+        <el-menu
+          style="height:99.8vh"
+          :default-openeds="['1', '2', '3']"
+          :router="true"
+        >
           <!-- 导航1 ： 交易流程部分-->
           <el-submenu index="1">
-            <template slot="title"><i class="el-icon-message"></i>易物信息</template>
+            <template slot="title"
+              ><i class="el-icon-message"></i>便捷校园</template
+            >
             <el-menu-item-group>
-              <el-menu-item index="/accInfo/swapApplyPage">易物申请</el-menu-item>
-              <el-menu-item index="/accInfo/transactionProgressPage">易物进度</el-menu-item>
-              <el-menu-item index="/accInfo/appealProgressPage">申诉进度</el-menu-item>
+              <el-menu-item index="/convenientCampus/roomap"
+                >教室预约</el-menu-item
+              >
+              <el-menu-item index="/convenientCampus/timeinfo"
+                >学校课程时间</el-menu-item
+              >
             </el-menu-item-group>
           </el-submenu>
           <!-- 导航2 ： 物品操作部分-->
           <el-submenu index="2">
-            <template slot="title"><i class="el-icon-goods"></i>物品操作</template>
+            <template slot="title"
+              ><i class="el-icon-goods"></i>综合信息</template
+            >
             <el-menu-item-group>
-              <el-menu-item index="/accInfo/addProductPage">新增物品</el-menu-item>
-              <el-menu-item index="/accInfo/productInfoPage">货架操作</el-menu-item>
-              <el-menu-item index="/user/list">用户信息列表</el-menu-item>
+              <el-menu-item index="/inforMation/user"
+                >用户信息</el-menu-item
+              >
+              <el-menu-item index="/inforMation/lessoninfo"
+                >课程信息</el-menu-item
+              >
+              <el-menu-item index="/inforMation/classinfo"
+                >班级信息</el-menu-item
+              >
+              <el-menu-item index="/inforMation/roominfo"
+                >教室信息</el-menu-item
+              >
             </el-menu-item-group>
           </el-submenu>
           <!-- 导航3 : 用户信息部分 -->
           <el-submenu index="3">
-            <template slot="title"><i class="el-icon-user"></i>个人信息</template>
+            <template slot="title"
+              ><i class="el-icon-user"></i>个人信息</template
+            >
             <el-menu-item-group>
-              <el-menu-item index="/user/updateUser">修改信息</el-menu-item>
-              <el-menu-item index="/user/updatePassword">修改密码</el-menu-item>
-              <el-menu-item index="/user/deleteUser">注销账号</el-menu-item>
+              <el-menu-item index="/userInfo/updateUser">修改信息</el-menu-item>
+              <el-menu-item index="/userInfo/updatePassword"
+                >修改密码</el-menu-item
+              >
+              <el-menu-item index="/userInfo/deleteUser">注销账号</el-menu-item>
             </el-menu-item-group>
           </el-submenu>
-
         </el-menu>
       </el-aside>
 
       <el-container>
-
         <el-header style="text-align: left; font-size: 12px">
-          <span>用户：{{ user.username }}</span>
+          <span>用户：{{ home.homename }}</span>
           <el-button type="danger" @click="logout">注销登陆</el-button>
         </el-header>
 
         <el-main>
-          <router-view />
+          <keep-alive>
+            <router-view />
+          </keep-alive>
         </el-main>
-
       </el-container>
     </el-container>
   </div>
@@ -59,40 +82,41 @@
 export default {
   name: "Home.vue",
   //import引入的组件需要注入到对象中才能使用
-  data () {
+  data() {
     return {
       // tableData: Array(5).fill(item),
-      user: {
-        username: '访问错误！'
-      }
-    }
+      home: {
+        homename: "访问错误！",
+      },
+    };
   },
 
   methods: {
-    logout () {
-      const _this = this
-      _this.$axios.get("/logout", {
-        headers: {
-          "Authorization": localStorage.getItem("token")
-        }
-      }).then(res => {
-        _this.$store.commit("REMOVE_INFO")
-        _this.$router.push("/login")
-
-      })
-    }
+    logout() {
+      const _this = this;
+      _this.$axios
+        .get("/logout", {
+          headers: {
+            Authorization: localStorage.getItem("token"),
+          },
+        })
+        .then((res) => {
+          _this.$store.commit("REMOVE_INFO");
+          _this.$router.push("/login");
+        });
+    },
   },
-  created () {
-    if (this.$store.getters.getUser.username) {
-      this.user.username = this.$store.getters.getUser.username
+  created() {
+    if (this.$store.getters.gethome.homename) {
+      this.home.homename = this.$store.getters.gethome.homename;
 
-      this.hasLogin = true
+      this.hasLogin = true;
     }
   },
 
   components: {
     // 'TopBar': TopBar,
-  }
+  },
 };
 </script>
 <style lang="less" scoped>
@@ -125,8 +149,8 @@ export default {
 .el-main {
   background-color: rgb(255, 255, 255) !important;
   color: #333;
-  text-align: center;
-  line-height: 160px;
+  // text-align: center;
+  // line-height: 160px;
 }
 
 body > .el-container {
