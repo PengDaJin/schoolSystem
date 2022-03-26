@@ -107,8 +107,8 @@ export default {
     },
   },
   created() {
-    if (this.$store.getters.gethome.homename) {
-      this.home.homename = this.$store.getters.gethome.homename;
+    if (this.$store.getters.getUser.username) {
+      this.home.homename = this.$store.getters.getUser.username
 
       this.hasLogin = true;
     }

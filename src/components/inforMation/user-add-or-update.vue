@@ -167,12 +167,11 @@ export default {
     },
     init(id) {
       this.dataForm.id = id || 0;
-      console.log("id:", this.dataForm.id);
       this.$nextTick(() => {
         this.$refs["dataForm"].resetFields();
         if (this.dataForm.id) {
           this.$axios
-            .get(`http://175.178.215.234:8801/user/getUserById/${this.dataForm.id}`)
+            .get(`/user/getUserById/${this.dataForm.id}`)
             .then(({ data }) => {
               if (data && data.code === 200) {
                 this.dataForm.username = data.data.username;
@@ -196,23 +195,22 @@ export default {
         if (valid) {
           console.log("valid:", valid);
           this.$axios
-            .post(`http://175.178.215.234:8801/user/${!this.dataForm.id ? "register" : "update"}`,
-              {
-                // this.$http.adornData({
-                data: {
+            .post(`http://175.178.215.234:8801/user/${!this.dataForm.id ? "register" : "update"}`,this.dataForm)
+              // {
+                // data: {
+                //   username: this.dataForm.username,
+                //   password: this.dataForm.password,
+                //   realname: this.dataForm.realname,
+                //   schoolCard: this.dataForm.schoolCard,
+                //   age: this.dataForm.age,
+                //   sex: this.dataForm.sex,
                   // id: this.dataForm.id || undefined,
-                  username: this.dataForm.username,
-                  password: this.dataForm.password,
-                  realname: this.dataForm.realname,
-                  schoolCard: this.dataForm.schoolCard,
-                  age: this.dataForm.age,
-                  sex: this.dataForm.sex,
                   // role: this.dataForm.role,
                   // deleted: this.dataForm.deleted,
                   // createTime: this.dataForm.createTime,
                   // updateTime: this.dataForm.updateTime,
-                },
-              })
+                // },
+              // }
             .then(({ data }) => {
               if (data && data.code === 200) {
                 this.goBack();

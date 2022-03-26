@@ -414,7 +414,7 @@ body {
   /* background-color: #000; */
 }
 .el-row {
-  padding-top: 100px;
+  /* padding-top: 100px; */
 }
 .el-col {
   border-radius: 4px;

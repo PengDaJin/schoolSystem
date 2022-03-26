@@ -191,7 +191,7 @@ export default {
     // 获取数据列表
     getDataList() {
       this.$axios
-        .get("http://175.178.215.234:8801/user/list", {
+        .get("/user/list", {
           params: {
             currPage: this.pageIndex,
             pageSize: this.pageSize,
@@ -225,8 +225,11 @@ export default {
         }
       ).then(() => {
         this.$axios
-          .post("http://175.178.215.234:8801/user/delete", {
-            params: { id },
+          .delete("/user/delete", {
+            data: [`${id}`],
+            headers: {
+              "Authorization": localStorage.getItem("token"),
+            },
           })
           .then(({ data }) => {
             if (data && data.code === 0) {
