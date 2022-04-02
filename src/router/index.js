@@ -1,6 +1,7 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
 import Home from "../views/Home.vue";
+import User from "../components/inforMation/user.vue";
 
 Vue.use(VueRouter);
 
@@ -21,6 +22,8 @@ const routes = [
       requireAuth: true
     },
     component: Home,
+    redirect: '/inforMation/user',
+    children: [{ path: '/inforMation/user', component: User }]
   },
   {
     path: "/login",

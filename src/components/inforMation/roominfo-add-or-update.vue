@@ -1,18 +1,18 @@
 <template>
   <div>
-    <rj-content-box style="height: 60px;">
+    <head-content-box style="height: 60px;">
       <el-page-header
         @back="goBack"
         :content="!dataForm.id ? '新增' : '修改'"
       />
-    </rj-content-box>
+    </head-content-box>
     <el-form
       :model="dataForm"
       :rules="dataRule"
       ref="dataForm"
       @keyup.enter.native="dataFormSubmit()"
     >
-      <rj-content-box style="height: 100%;" title="教室信息" color="#ff9149">
+      <head-content-box style="height: 100%;" title="教室信息" color="#ff9149">
         <el-row :gutter="40">
           <el-col :inline="true" :span="8">
             <el-form-item label="教室编号" prop="roomNum">
@@ -48,13 +48,22 @@
           </el-col>
           <el-col :inline="true" :span="8">
             <el-form-item label="教室可预约状态" prop="status">
-              <el-input
+              <el-select
                 v-model="dataForm.status"
-                placeholder="教室可预约状态 0允许预约 1无法预约"
-              ></el-input>
+                style="width:100%"
+                placeholder="请选择教室可预约状态"
+              >
+                <el-option
+                  v-for="item in options"
+                  :key="item.value"
+                  :label="item.label"
+                  :value="item.value"
+                >
+                </el-option>
+              </el-select>
             </el-form-item>
           </el-col>
-          <el-col :inline="true" :span="8">
+          <!-- <el-col :inline="true" :span="8">
             <el-form-item label="逻辑删除" prop="deleted">
               <el-input
                 v-model="dataForm.deleted"
@@ -77,16 +86,16 @@
                 placeholder="更新时间"
               ></el-input>
             </el-form-item>
-          </el-col>
+          </el-col> -->
         </el-row>
-      </rj-content-box>
+      </head-content-box>
     </el-form>
-    <rj-content-box style="height: 80px;" :isTip="false">
+    <head-content-box style="height: 80px;" :isTip="false">
       <div class="flex-row-end">
         <el-button @click="goBack()">取消</el-button>
         <el-button type="primary" @click="dataFormSubmit()">确定</el-button>
       </div>
-    </rj-content-box>
+    </head-content-box>
   </div>
 </template>
 
@@ -94,6 +103,17 @@
 export default {
   data() {
     return {
+      options: [
+        {
+          value: "0",
+          label: "允许预约",
+        },
+        {
+          value: "1",
+          label: "无法预约",
+        },
+      ],
+      value: "",
       dataForm: {
         id: 0,
         roomNum: "",
@@ -121,7 +141,7 @@ export default {
         status: [
           {
             required: true,
-            message: "教室可预约状态 0允许预约 1无法预约不能为空",
+            message: "教室可预约状态",
             trigger: "blur",
           },
         ],
@@ -152,16 +172,17 @@ export default {
         //     method: "get",
         //     params: this.$http.adornParams(),
         if (this.dataForm.id) {
-          this.$axios.get(`/user/info/${this.dataForm.id}`).then(({ data }) => {
+          this.$axios.get(`/roomap/info/${this.dataForm.id}`)
+          .then(({ data }) => {
             if (data && data.code === 200) {
               this.dataForm.roomNum = data.data.roomNum;
               this.dataForm.roomType = data.data.roomType;
               this.dataForm.description = data.data.description;
               this.dataForm.realiaInfo = data.data.realiaInfo;
               this.dataForm.status = data.data.status;
-              this.dataForm.deleted = data.data.deleted;
-              this.dataForm.createtime = data.data.createtime;
-              this.dataForm.updatetime = data.data.updatetime;
+              // this.dataForm.deleted = data.data.deleted;
+              // this.dataForm.createtime = data.data.createtime;
+              // this.dataForm.updatetime = data.data.updatetime;
             }
           });
         }

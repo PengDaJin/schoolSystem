@@ -1,7 +1,7 @@
 <template>
   <div class="mod-config">
     <template v-if="operateType === 0">
-      <rj-content-box title="查询条件" color="#4B8AFE">
+      <!-- <head-content-box title="查询条件" color="#4B8AFE">
         <el-row :gutter="30" style="margin-bottom: -20px">
           <el-form
             :inline="true"
@@ -9,7 +9,7 @@
             @keyup.enter.native="getDataList()"
           >
             <el-col :inline="true" :span="3.5">
-              <el-form-item>
+              <el-form-item label="参数名:">
                 <el-input
                   v-model="dataForm.key"
                   placeholder="参数名"
@@ -30,15 +30,12 @@
                 <el-button type="primary" @click="addOrUpdateHandle()"
                   >新增</el-button
                 >
-                <!-- <el-button v-if="isAuth('sys:timeinfo:save')" type="primary" @click="addOrUpdateHandle()">新增</el-button>
-                <el-button v-if="isAuth('sys:timeinfo:delete')" type="danger" @click="deleteHandle()"
-                  :disabled="dataListSelections.length <= 0">批量删除</el-button> -->
               </el-form-item>
             </el-col>
           </el-form>
         </el-row>
-      </rj-content-box>
-      <rj-content>
+      </head-content-box> -->
+      <head-content>
         <el-table
           :data="dataList"
           border
@@ -46,20 +43,6 @@
           :cell-style="TableRowStyle"
           size="medium"
         >
-          <el-table-column
-            type="selection"
-            header-align="center"
-            align="center"
-            width="50"
-          >
-          </el-table-column>
-          <el-table-column
-            prop="id"
-            header-align="center"
-            align="center"
-            label="主键id"
-          >
-          </el-table-column>
           <el-table-column
             prop="usePeriod"
             header-align="center"
@@ -101,6 +84,9 @@
                 @click="deleteHandle(scope.row.id)"
                 >删除</el-button
               >
+              <el-button type="text" size="small" @click="addOrUpdateHandle()"
+                >新增</el-button
+              >
             </template>
           </el-table-column>
         </el-table>
@@ -114,7 +100,7 @@
           layout="total, sizes, prev, pager, next, jumper"
         >
         </el-pagination>
-      </rj-content>
+      </head-content>
     </template>
     <!-- 弹窗, 新增 / 修改 -->
     <add-or-update
@@ -158,7 +144,7 @@ export default {
           params: this.$http.adornParams({
             currPage: this.pageIndex,
             pageSize: this.pageSize,
-            // key: this.dataForm.key,
+            key: this.dataForm.key,
           }),
         })
         .then(({ data }) => {
@@ -169,10 +155,10 @@ export default {
             this.dataList = [];
             this.totalPage = 0;
           }
-        })
-        .catch(() => {
-          console.log('data:');
         });
+      // .catch(() => {
+      //   console.log('data:');
+      // });
     },
     // 每页数
     sizeChangeHandle(val) {
@@ -229,24 +215,32 @@ export default {
           type: "warning",
         }
       ).then(() => {
-        this.$http({
-          url: this.$http.adornUrl("/timeinfo/delete"),
-          method: "post",
-          data: this.$http.adornData(ids, false),
-        }).then(({ data }) => {
-          if (data && data.code === 0) {
-            this.$message({
-              message: "操作成功",
-              type: "success",
-              duration: 1500,
-              onClose: () => {
-                this.getDataList();
-              },
-            });
-          } else {
-            this.$message.error(data.msg);
-          }
-        });
+        this.$axios
+          .delete(
+            `/timeinfo/delete/${id}`,
+            // {
+            //   id: id,
+            // }
+            // {
+            //   params: {
+            //     id: id,
+            //   },
+            // }
+          )
+          .then(({ data }) => {
+            if (data && data.code === 200) {
+              this.$message({
+                message: "操作成功",
+                type: "success",
+                duration: 1500,
+                onClose: () => {
+                  this.getDataList();
+                },
+              });
+            } else {
+              this.$message.error(data.msg);
+            }
+          });
       });
     },
   },

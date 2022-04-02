@@ -1,20 +1,50 @@
 <template>
   <div class="mod-config">
     <template v-if="operateType === 0">
-      <el-row :gutter="20" style="margin-bottom: 0px">
-        <rj-content-box title="查询条件" color="#4B8AFE">
+      <el-row :gutter="20">
+        <head-content-box
+          style="margin: 0 10px 25px 10px;"
+          title="查询条件"
+          color="#4B8AFE"
+        >
           <el-form
             :inline="true"
             :model="dataForm"
             @keyup.enter.native="getDataList()"
           >
             <el-col :inline="true" :span="3.5">
-              <el-form-item label="参数名:">
+              <el-form-item label="真实姓名:">
                 <el-input
-                  v-model="dataForm.key"
-                  placeholder="参数名"
+                  v-model="dataForm.realname"
+                  placeholder="真实姓名"
                   clearable
                 ></el-input>
+              </el-form-item>
+            </el-col>
+            <el-col :inline="true" :span="3.5">
+              <el-form-item label="学校证件号码:">
+                <el-input
+                  v-model="dataForm.schoolCard"
+                  placeholder="学校证件号码"
+                  clearable
+                ></el-input>
+              </el-form-item>
+            </el-col>
+            <el-col :inline="true" :span="3.5">
+              <el-form-item label="性别">
+                <el-select
+                  v-model="dataForm.sex"
+                  :formatter="sex"
+                  placeholder="请选择性别"
+                >
+                  <el-option
+                    v-for="item in optionssex"
+                    :key="item.value"
+                    :label="item.label"
+                    :value="item.value"
+                  >
+                  </el-option>
+                </el-select>
               </el-form-item>
             </el-col>
             <el-col :inline="true" :span="1.5">
@@ -28,50 +58,20 @@
                 >新增</el-button
               >
             </el-col>
-            <el-col :inline="true" :span="1.5">
-              <el-button
-                type="danger"
-                @click="deleteHandle()"
-                :disabled="dataListSelections.length <= 0"
-                >批量删除</el-button
-              >
-            </el-col>
           </el-form>
-        </rj-content-box>
+        </head-content-box>
       </el-row>
-      <rj-content>
+      <head-content>
         <el-table
           :data="dataList"
           border
-          @selection-change="selectionChangeHandle"
           size="medium"
         >
-          <el-table-column
-            type="selection"
-            header-align="center"
-            align="center"
-            width="50"
-          >
-          </el-table-column>
-          <el-table-column
-            prop="id"
-            header-align="center"
-            align="center"
-            label="主键id"
-          >
-          </el-table-column>
           <el-table-column
             prop="username"
             header-align="center"
             align="center"
             label="用户名"
-          >
-          </el-table-column>
-          <el-table-column
-            prop="password"
-            header-align="center"
-            align="center"
-            label="密码"
           >
           </el-table-column>
           <el-table-column
@@ -100,6 +100,7 @@
             prop="sex"
             header-align="center"
             align="center"
+            :formatter="sex"
             label="性别"
           >
           </el-table-column>
@@ -150,7 +151,7 @@
           layout="total, sizes, prev, pager, next, jumper"
         >
         </el-pagination>
-      </rj-content>
+      </head-content>
     </template>
     <!-- 弹窗, 新增 / 修改 -->
     <add-or-update
@@ -170,7 +171,9 @@ export default {
   data() {
     return {
       dataForm: {
-        key: "",
+        realname: "",
+        schoolCard: "",
+        sex: "",
       },
       dataList: [],
       pageIndex: 1,
@@ -179,6 +182,16 @@ export default {
       dataListSelections: [],
       addOrUpdateVisible: false,
       operateType: 0, // 1新增 2修改 3详情
+      optionssex: [
+        {
+          value: "0",
+          label: "男",
+        },
+        {
+          value: "1",
+          label: "女",
+        },
+      ],
     };
   },
   components: {
@@ -188,6 +201,24 @@ export default {
     this.getDataList();
   },
   methods: {
+    sex(row) {
+      if (row.sex == 0) {
+        return "男";
+      } else if (row.sex == 1) {
+        return "女";
+      } else {
+        return "-";
+      }
+    },
+    role(row) {
+      if (row.role == 1) {
+        return "老师";
+      } else if (row.role == 2) {
+        return "同学";
+      } else {
+        return "-";
+      }
+    },
     // 获取数据列表
     getDataList() {
       this.$axios
@@ -195,6 +226,9 @@ export default {
           params: {
             currPage: this.pageIndex,
             pageSize: this.pageSize,
+            realname: this.dataForm.realname,
+            schoolCard: this.dataForm.schoolCard,
+            sex: this.dataForm.sex,
           },
         })
         .then(({ data }) => {
@@ -209,7 +243,6 @@ export default {
     },
     // 删除
     deleteHandle(id) {
-      console.log("id:", id);
       var ids = id
         ? [id]
         : this.dataListSelections.map((item) => {
@@ -226,13 +259,12 @@ export default {
       ).then(() => {
         this.$axios
           .delete("/user/delete", {
-            data: [`${id}`],
-            headers: {
-              "Authorization": localStorage.getItem("token"),
+            params: {
+              id: id,
             },
           })
           .then(({ data }) => {
-            if (data && data.code === 0) {
+            if (data && data.code === 200) {
               this.$message({
                 message: "操作成功",
                 type: "success",
@@ -258,10 +290,6 @@ export default {
       this.pageIndex = val;
       this.getDataList();
     },
-    // 多选
-    selectionChangeHandle(val) {
-      this.dataListSelections = val;
-    },
     // 新增 / 修改
     addOrUpdateHandle(id) {
       this.addOrUpdateVisible = true;
@@ -280,43 +308,6 @@ export default {
         this.dataForm[key] = "";
       });
     },
-    // 删除
-    // deleteHandle(id) {
-    //   var ids = id
-    //     ? [id]
-    //     : this.dataListSelections.map((item) => {
-    //         return item.id;
-    //       });
-    //   this.$confirm(
-    //     `确定对[id=${ids.join(",")}]进行[${id ? "删除" : "批量删除"}]操作?`,
-    //     "提示",
-    //     {
-    //       confirmButtonText: "确定",
-    //       cancelButtonText: "取消",
-    //       type: "warning",
-    //     }
-    //   ).then(() => {
-    //     console.log(this.$http.adornData(ids, false));
-    //     this.$axios
-    //       .post("http://175.178.215.234:8801/user/delete", {
-    //         data: this.$http.adornData(ids, false),
-    //       })
-    //       .then(({ data }) => {
-    //         if (data && data.code === 0) {
-    //           this.$message({
-    //             message: "操作成功",
-    //             type: "success",
-    //             duration: 1500,
-    //             onClose: () => {
-    //               this.getDataList();
-    //             },
-    //           });
-    //         } else {
-    //           this.$message.error(data.msg);
-    //         }
-    //       });
-    //   });
-    // },
   },
 };
 </script>

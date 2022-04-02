@@ -18,11 +18,11 @@ import './assets/css/style.css'
 import './assets/css/font.css'
 import 'font-awesome/css/font-awesome.min.css'
 
-import rjContentBox from '/src/components/rj-content-box'
-import rjContent from '/src/components/rj-content'
+import HeadContentBox from '/src/components/head-content-box'
+import HeadContent from '/src/components/head-content'
 
-Vue.component('rjContentBox', rjContentBox)
-Vue.component('rjContent', rjContent)
+Vue.component('HeadContentBox', HeadContentBox)
+Vue.component('HeadContent', HeadContent)
 Vue.use(Element);
 
 Vue.prototype.$http = httpRequest // ajax请求方法

@@ -36,6 +36,6 @@ export default {
   padding: 26px;
   position: relative;
   
-  margin: -10px;
+  // margin: -10px;
 }
 </style>

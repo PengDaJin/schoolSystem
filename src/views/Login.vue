@@ -106,14 +106,45 @@
               autocomplete="off"
             ></el-input>
           </el-form-item>
-          <el-form-item label="学生证号" prop="studentId">
+          <el-form-item label="姓名" prop="realname">
             <el-input
               type="text"
-              v-model="rform.studentId"
+              v-model="rform.realname"
               autocomplete="off"
             ></el-input>
           </el-form-item>
-          <el-form-item label="联系电话" prop="phoneNum">
+          <el-form-item label="年龄" prop="age">
+            <el-input
+              type="text"
+              v-model="rform.age"
+              autocomplete="off"
+            ></el-input>
+          </el-form-item>
+          <!-- :formatter="sex" -->
+          <el-form-item label="性别" prop="sex">
+            <el-select
+              v-model="rform.sex"
+              style="width:100%"
+              placeholder="请选择性别"
+            >
+              <el-option
+                v-for="item in optionssex"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value"
+              >
+              </el-option>
+            </el-select>
+          </el-form-item>
+          <el-form-item label="学生证号" prop="schoolCard">
+            <el-input
+              type="text"
+              v-model="rform.schoolCard"
+              autocomplete="off"
+            ></el-input>
+          </el-form-item>
+          <!-- -->
+          <!-- <el-form-item label="联系电话" prop="phoneNum">
             <el-input
               type="text"
               v-model="rform.phoneNum"
@@ -126,7 +157,7 @@
               v-model="rform.onlineContact"
               autocomplete="on"
             ></el-input>
-          </el-form-item>
+          </el-form-item> -->
 
           <el-form-item>
             <el-button type="primary" @click="submitrform()" :loading="loading">
@@ -216,6 +247,16 @@ export default {
     };
 
     return {
+      optionssex: [
+        {
+          value: "0",
+          label: "男",
+        },
+        {
+          value: "1",
+          label: "女",
+        },
+      ],
       ruleForm: {
         username: "admin",
         password: "admin",
@@ -228,12 +269,12 @@ export default {
       timer: null,
 
       rform: {
-        username: "123",
+        username: "",
         password: "",
-        checkpass: "",
-        studentId: "",
-        phoneNum: "12300000000",
-        onlineContact: "45678954@qq.com",
+        realname: "",
+        age: "",
+        sex: "",
+        schoolCard: "",
         // delivery: false,
       },
 
@@ -260,28 +301,28 @@ export default {
           { min: 6, max: 18, message: "长度在6到18个字符", trigger: "blur" },
           { validator: validatePass3, trigger: "blur" },
         ],
-        studentId: [
+        schoolCard: [
           {
-            pattern: /^1{1,2}\d{9}$/,
+            pattern: /^\d{1,10}$/,
             message: "长度为10的学号",
             trigger: "blur",
           },
           { required: true, message: "请输入学生证号", trigger: "blur" },
           { validator: validateStuId, trigger: "blur" },
         ],
-        phoneNum: [
-          { required: true, message: "请输入手机号", trigger: "blur" },
+        age: [
+          { required: true, message: "请输入年龄", trigger: "blur" },
           {
-            pattern: /^0{0,1}(13[0-9]|15[7-9]|153|156|18[7-9])[0-9]{8}$/,
-            message: "手机号格式不对",
+            pattern: /^(([0-9]|[1-9][1-9]|1[0-7][0-9])(\\.[0-9]+)?|180)$/,
+            message: "年龄最大为180岁",
             trigger: "blur",
           },
           { validator: validatePhone, trigger: "blur" },
         ],
-        onlineContact: [
+        sex: [
           {
             required: true,
-            message: "请输入QQWeChat或者邮箱号",
+            message: "请输入性别",
             trigger: "blur",
           },
           { validator: validateOnline, trigger: "blur" },
@@ -293,29 +334,28 @@ export default {
   methods: {
     // 登录表单
     submitForm(formName) {
-      this.$axios.post("/login", this.ruleForm).then((res) => {
-        // console.log(res)
-        // console.log(res.data.data)
+      // this.$axios
+      //   .post("/login", {
+      //     username: this.ruleForm.username,
+      //     password: this.$md5(this.ruleForm.password),
+      //   })
+      //   .then((res) => {
+      //     const jwt = res.headers["authorization"];
+      //     const userInfo = res.data.data;
+      //     _this.$store.commit("SET_TOKEN", jwt);
+      //     _this.$store.commit("SET_USERINFO", userInfo);
 
-        const jwt = res.headers["authorization"];
-        const userInfo = res.data.data;
-
-        // console.log(userInfo)
-
-        // 把数据共享出去
-        _this.$store.commit("SET_TOKEN", jwt);
-        _this.$store.commit("SET_USERINFO", userInfo);
-
-        // 获取USerInfo信息
-        // console.log("================")
-        // console.log(_this.$store.getters.getUser)
-
-        _this.$router.push("/home");
-      }),
-        this.$refs["ruleForm"].validate((valid) => {
-          if (valid) {
-            const _this = this;
-            this.$axios.post("/login", this.ruleForm).then((res) => {
+      //     _this.$router.push("/home");
+      //   }),
+      this.$refs["ruleForm"].validate((valid) => {
+        if (valid) {
+          const _this = this;
+          this.$axios
+            .post("/login", {
+              username: this.ruleForm.username,
+              password: this.$md5(this.ruleForm.password),
+            })
+            .then((res) => {
               // console.log(res)
               // console.log(res.data.data)
 
@@ -334,12 +374,12 @@ export default {
 
               _this.$router.push("/home");
             });
-          } else {
-            console.log("error submit!!");
-            this.$message("请确认您输入的都正确了嘛！？");
-            return false;
-          }
-        });
+        } else {
+          console.log("error submit!!");
+          this.$message("请确认您输入的都正确了嘛！？");
+          return false;
+        }
+      });
     },
 
     //重置表单
@@ -358,14 +398,22 @@ export default {
             .then((_) => {
               this.loading = false;
 
+              console.log("res.data:", this.rform.username);
               // done();
-              // 动画关闭需要一定的时间
-              this.$axios.post("/user/register", this.rform).then((res) => {
-                console.log(res.data);
-
-                this.$message.success("注册成功！u success Register！");
-                this.loading = false;
-              });
+              // 动画关闭需要一定的时间 this.rform
+              this.$axios
+                .post("/user/register", {
+                  username: this.rform.username,
+                  password: this.$md5(this.rform.password),
+                  realname: this.rform.realname,
+                  age: this.rform.age,
+                  sex: this.rform.sex,
+                  schoolCard: this.rform.schoolCard,
+                })
+                .then((res) => {
+                  this.$message.success("注册成功！u success Register！");
+                  this.loading = false;
+                });
             })
             .catch((_) => {});
         } else {
@@ -405,7 +453,7 @@ export default {
   },
 };
 </script>
-<style >
+<style>
 body {
   width: 100vw;
   height: 100vh;

@@ -1,7 +1,7 @@
 <template>
   <div class="mod-config">
     <template v-if="operateType === 0">
-      <rj-content-box title="查询条件">
+      <head-content-box title="查询条件">
         <el-row :gutter="30" style="margin-bottom: -20px">
           <el-form
             :inline="true"
@@ -9,7 +9,7 @@
             @keyup.enter.native="getDataList()"
           >
             <el-col :inline="true" :span="3.5">
-              <el-form-item>
+              <el-form-item label="参数名:">
                 <el-input
                   v-model="dataForm.key"
                   placeholder="参数名"
@@ -37,8 +37,8 @@
             </el-col>
           </el-form>
         </el-row>
-      </rj-content-box>
-      <rj-content>
+      </head-content-box>
+      <head-content>
         <el-table
           :data="dataList"
           border
@@ -47,50 +47,43 @@
           :cell-style="TableRowStyle"
           style="width: 100%;"
         >
-          <el-table-column
-            type="selection"
-            header-align="center"
-            align="center"
-            width="50"
-          >
-          </el-table-column>
-          <el-table-column
+          <!-- <el-table-column
             prop="id"
             header-align="center"
             align="center"
             label="主键id"
           >
-          </el-table-column>
+          </el-table-column> -->
           <el-table-column
-            prop="roomnum"
+            prop="roomNum"
             header-align="center"
             align="center"
             label="教室编号"
           >
           </el-table-column>
           <el-table-column
-            prop="actname"
+            prop="actName"
             header-align="center"
             align="center"
             label="活动名称"
           >
           </el-table-column>
           <el-table-column
-            prop="lessonnum"
+            prop="lessonNum"
             header-align="center"
             align="center"
             label="课程编号"
           >
           </el-table-column>
           <el-table-column
-            prop="weeknumid"
+            prop="weekNumId"
             header-align="center"
             align="center"
             label="周时间id"
           >
           </el-table-column>
           <el-table-column
-            prop="usetimeid"
+            prop="useTimeId"
             header-align="center"
             align="center"
             label="使用时间id"
@@ -104,27 +97,29 @@
           >
           </el-table-column>
           <el-table-column
-            prop="ordernum"
+            prop="orderNum"
             header-align="center"
             align="center"
             label="使用人证件号"
           >
           </el-table-column>
           <el-table-column
-            prop="orderstatus"
+            prop="orderStatus"
             header-align="center"
             align="center"
-            label="预约教室状态 0正在预约 1预约成功 2预约失败"
+            :formatter="orderStatus"
+            label="预约教室状态"
           >
           </el-table-column>
           <el-table-column
-            prop="usestatus"
+            prop="useStatus"
             header-align="center"
             align="center"
-            label="使用状态 0未使用 1使用中"
+            :formatter="useStatus"
+            label="使用状态"
           >
           </el-table-column>
-          <el-table-column
+          <!-- <el-table-column
             prop="deleted"
             header-align="center"
             align="center"
@@ -132,19 +127,19 @@
           >
           </el-table-column>
           <el-table-column
-            prop="createtime"
+            prop="createTime"
             header-align="center"
             align="center"
             label="创建时间"
           >
           </el-table-column>
           <el-table-column
-            prop="updatetime"
+            prop="updateTime"
             header-align="center"
             align="center"
             label="更新时间"
           >
-          </el-table-column>
+          </el-table-column> -->
           <el-table-column
             fixed="right"
             header-align="center"
@@ -178,7 +173,7 @@
           layout="total, sizes, prev, pager, next, jumper"
         >
         </el-pagination>
-      </rj-content>
+      </head-content>
     </template>
     <!-- 弹窗, 新增 / 修改 -->
     <add-or-update
@@ -216,27 +211,46 @@ export default {
     this.getDataList();
   },
   methods: {
+    orderStatus(row) {
+      if (row.orderStatus == 0) {
+        return "正在预约";
+      } else if (row.orderStatus == 1) {
+        return "预约成功";
+      }else if (row.orderStatus == 2) {
+        return "预约失败";
+      } else {
+        return "-";
+      }
+    },
+    useStatus(row) {
+      if (row.useStatus == 0) {
+        return "未使用";
+      } else if (row.useStatus == 1) {
+        return "使用中";
+      } else {
+        return "-";
+      }
+    },
     // 获取数据列表
     getDataList() {
-      this.dataListLoading = true;
-      this.$http({
-        url: this.$http.adornUrl("/roomap/list"),
-        method: "get",
-        params: this.$http.adornParams({
-          currPage: this.pageIndex,
-          pageSize: this.pageSize,
-          key: this.dataForm.key,
-        }),
-      }).then(({ data }) => {
-        if (data && data.code === 0) {
-          this.dataList = data.data.records;
-          this.totalPage = data.data.total;
-        } else {
-          this.dataList = [];
-          this.totalPage = 0;
-        }
-        this.dataListLoading = false;
-      });
+      this.$axios
+        .get("/roomap/list", {
+          params: this.$http.adornParams({
+            currPage: this.pageIndex,
+            pageSize: this.pageSize,
+            key: this.dataForm.key,
+          }),
+        })
+        .then(({ data }) => {
+          if (data && data.code === 200) {
+            this.dataList = data.data.records;
+            this.totalPage = data.data.total;
+          } else {
+            this.dataList = [];
+            this.totalPage = 0;
+          }
+          this.dataListLoading = false;
+        });
     },
     // 每页数
     sizeChangeHandle(val) {

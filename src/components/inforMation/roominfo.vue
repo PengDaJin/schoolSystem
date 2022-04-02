@@ -1,8 +1,12 @@
 <template>
   <div class="analysis-results">
     <template v-if="operateType === 0">
-      <el-row :gutter="30">
-        <rj-content-box title="查询条件" color="#4B8AFE">
+      <!-- <el-row :gutter="30">
+        <head-content-box
+          style="margin: 0 15px 25px 15px;"
+          title="查询条件"
+          color="#4B8AFE"
+        >
           <el-form
             :inline="true"
             :model="dataForm"
@@ -31,18 +35,12 @@
                 <el-button type="primary" @click="addOrUpdateHandle()"
                   >新增</el-button
                 >
-                <el-button
-                  type="danger"
-                  @click="deleteHandle()"
-                  :disabled="dataListSelections.length <= 0"
-                  >批量删除
-                </el-button>
               </el-form-item>
             </el-col>
           </el-form>
-        </rj-content-box>
-      </el-row>
-      <rj-content>
+        </head-content-box>
+      </el-row> -->
+      <head-content>
         <el-table
           :data="dataList"
           border
@@ -50,20 +48,13 @@
           :cell-style="TableRowStyle"
           size="medium"
         >
-          <el-table-column
-            type="selection"
-            header-align="center"
-            align="center"
-            width="50"
-          >
-          </el-table-column>
-          <el-table-column
+          <!-- <el-table-column
             prop="id"
             header-align="center"
             align="center"
             label="主键id"
           >
-          </el-table-column>
+          </el-table-column> -->
           <el-table-column
             prop="roomNum"
             header-align="center"
@@ -75,6 +66,7 @@
             prop="roomType"
             header-align="center"
             align="center"
+            :formatter="roomtype"
             label="教室类型"
           >
           </el-table-column>
@@ -97,6 +89,7 @@
             prop="status"
             header-align="center"
             align="center"
+            :formatter="status"
             label="教室可预约状态"
           >
           </el-table-column>
@@ -127,6 +120,7 @@
             align="center"
             width="150"
             label="操作"
+            v-if="role < 3"
           >
             <template slot-scope="scope">
               <el-button
@@ -141,6 +135,9 @@
                 @click="deleteHandle(scope.row.id)"
                 >删除</el-button
               >
+              <el-button type="text" size="small" @click="addOrUpdateHandle()"
+                >新增</el-button
+              >
             </template>
           </el-table-column>
         </el-table>
@@ -154,7 +151,7 @@
           layout="total, sizes, prev, pager, next, jumper"
         >
         </el-pagination>
-      </rj-content>
+      </head-content>
     </template>
     <!-- 弹窗, 新增 / 修改 -->
     <add-or-update
@@ -172,6 +169,7 @@ import AddOrUpdate from "./roominfo-add-or-update";
 export default {
   data() {
     return {
+      role: 0,
       dataForm: {
         key: "",
       },
@@ -188,9 +186,32 @@ export default {
     AddOrUpdate,
   },
   activated() {
+    this.role = this.$store.getters.getUser.role;
     this.getDataList();
   },
   methods: {
+    roomtype(row) {
+      if (row.roomType == 0) {
+        return "普通教室";
+      } else if (row.roomType == 1) {
+        return "标准教室A/B";
+      } else if (row.roomType == 2) {
+        return "实验室A/B";
+      } else if (row.roomType == 3) {
+        return "阶梯教室A/B";
+      } else {
+        return "错误!请联系管理员";
+      }
+    },
+    status(row) {
+      if (row.status == 0) {
+        return "允许预约";
+      } else if (row.status == 1) {
+        return "无法预约";
+      } else {
+        return "-";
+      }
+    },
     // 获取数据列表
     getDataList() {
       this.$axios
@@ -275,21 +296,13 @@ export default {
         //   data: this.$http.adornData(ids, false),
 
         this.$axios
-          .delete(
-            "http://175.178.215.234:8801/roominfo/delete",
-            {
-              // [`${id}`],
-              data: [`${id}`],
-              headers: {
-                Authorization: localStorage.getItem("token"),
-              },
-            }
-            // data: '10',
-            // params: { id },
-            // data: this.$http.adornData(ids, false),
-          )
+          .delete("/roominfo/delete", {
+            params: {
+              id: id,
+            },
+          })
           .then(({ data }) => {
-            if (data && data.code === 0) {
+            if (data && data.code === 200) {
               this.$message({
                 message: "操作成功",
                 type: "success",

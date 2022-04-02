@@ -1,7 +1,6 @@
 <!-- 修改密码 -->
 <template>
   <div>
-
     <el-form ref="form" :model="form" :rules="rules" label-width="80px" style="padding: 50px">
       <el-form-item label="原密码" prop="oldpassowrd">
         <el-input v-model="form.oldpassowrd" type="password" autocomplete="off"></el-input>
@@ -29,7 +28,6 @@ export default {
   name: "UpdateUserPwdPage",
 
   data () {
-
     var validateOld = (rule, value, callback) => {
       if (value === "") {
         callback(new Error("请输入原密码"));
@@ -41,7 +39,7 @@ export default {
       if (value === "") {
         callback(new Error("请输入新密码"));
       } else if (value == this.form.oldpassowrd) {
-        callback(new Error('请使用与旧密码不一致的密码!'));
+        callback(new Error("请使用与旧密码不一致的密码!"));
       } else {
         callback();
       }
@@ -50,18 +48,17 @@ export default {
       if (value === "") {
         callback(new Error("请再次输入密码"));
       } else if (value !== this.form.newpassword) {
-        callback(new Error('两次输入密码不一致!'));
+        callback(new Error("两次输入密码不一致!"));
       } else {
         callback();
       }
     };
 
-
     return {
       form: {
-        oldpassowrd: '',
-        newpassword: '',
-        checkpassword: '',
+        oldpassowrd: "",
+        newpassword: "",
+        checkpassword: "",
       },
       rules: {
         oldpassword: [
@@ -78,37 +75,64 @@ export default {
           { required: true, message: "请输入密码", trigger: "blur" },
           { min: 6, max: 18, message: "长度在6到18个字符", trigger: "blur" },
           { validator: validateCheck, trigger: "blur" },
-        ]
+        ],
       },
-
-    }
+    };
   },
-
-
 
   methods: {
     onSubmit () {
-      console.log('submit!');
+      console.log("submit!");
 
-      this.$refs['form'].validate((valid) => {
+      this.$refs["form"].validate((valid) => {
         if (valid) {
+          this.$confirm("即将修改密码")
+            .then((_) => {
+              // updatePassword
+              this.$axios
+                .post(
+                  "/user/setPassword/" +
+                  this.$store.getters.getUser.id +
+                  "/" +
+                  this.$md5(this.form.oldpassowrd) +
+                  "/" +
+                  this.$md5(this.form.newpassword)
+                )
 
-          this.$confirm('即将修改密码').then(_ => {
-            this.$axios.post('/user/updatePassword/' + this.$store.getters.getUser.id + '/' + this.$md5(this.form.oldpassowrd) + '/' + this.$md5(this.form.newpassword)).then((res) => {
-              this.$message.success('密码修改成功!')
-            });
-          })
-            .catch(_ => { });
+                // this.$axios
+                //   .post("/user/setPassword", {
+                //     params: this.$http.adornParams({
+                //       id: this.$store.getters.getUser.id,
+                //       password: this.$md5(this.form.oldpassowrd),
+                //       newpassword: this.$md5(this.form.newpassword),
+                //     }),
+                // headers: {
+                //   Authorization: localStorage.getItem("token"),
+                // },
 
+                //   {
+                //     data: {
+                //       id:this.$md5(this.form.oldpassowrd),
+                //       mm:this.$md5(this.form.oldpassowrd),
+                //       xmm:this.$md5(this.form.newpassword)
+                //     },
+                //     headers: {
+                //       Authorization: localStorage.getItem("token"),
+                //     },
+                //   }
+                // )
+                .then((res) => {
+                  this.$message.success("密码修改成功!");
+                });
+            })
+            .catch((_) => { });
         } else {
-          this.$message('请再次确认你的输入框是否填写正确！');
+          this.$message("请再次确认你的输入框是否填写正确！");
           return false;
         }
-
       });
     },
-  }
-}
+  },
+};
 </script>
-<style scoped>
-</style>
+<style scoped></style>
